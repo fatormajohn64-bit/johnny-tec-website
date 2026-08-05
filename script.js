@@ -73,7 +73,7 @@ function createNewChat() {
         id: newId,
         title: "New Chat",
         messages: [
-            { sender: "ai", text: "Hello! Welcome to Johnny Tec AI. How can I assist you today?" }
+            { sender: "ai", text: "Hey there! 👋 I'm Johnny Tec AI. What's on your mind today? Feel free to ask me anything!" }
         ]
     };
     chats.unshift(newChat);
@@ -128,13 +128,40 @@ function appendBubbleToUI(sender, text) {
     scrollToBottom();
 }
 
+// TYPING "THINKING" DOTS
+function showTypingIndicator() {
+    const row = document.createElement("div");
+    row.className = "message-row ai";
+    row.id = "typing-indicator-row";
+
+    const label = document.createElement("div");
+    label.className = "sender-name";
+    label.innerText = "Johnny Tec";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+
+    row.appendChild(label);
+    row.appendChild(bubble);
+    chatContainer.appendChild(row);
+    scrollToBottom();
+}
+
+function removeTypingIndicator() {
+    const indicator = document.getElementById("typing-indicator-row");
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
 function renderPromptChips() {
     const group = document.createElement("div");
     group.className = "suggestions-group";
     group.innerHTML = `
-        <div class="chip" onclick="sendQuickPrompt('What services do you offer?')">💻 Development Services</div>
-        <div class="chip" onclick="sendQuickPrompt('Tell me about Johnny Tec.Dev')">🚀 About Johnny Tec</div>
-        <div class="chip" onclick="sendQuickPrompt('How fast is your performance?')">⚡ High Performance</div>
+        <div class="chip" onclick="sendQuickPrompt('Who is Johnny Tec?')">🚀 Who are you?</div>
+        <div class="chip" onclick="sendQuickPrompt('Can you write code for me?')">💻 Write Code</div>
+        <div class="chip" onclick="sendQuickPrompt('Tell me a fun tech joke')">😄 Tech Joke</div>
     `;
     chatContainer.appendChild(group);
 }
@@ -163,20 +190,20 @@ function sendMessage() {
     userInput.value = "";
     saveState();
 
-    // Simulated Smart AI Response
+    showTypingIndicator();
+
+    const thinkingTime = Math.min(Math.max(text.length * 20, 1000), 2200);
+
     setTimeout(() => {
-        let aiResponse = "Thank you for reaching out! Johnny Tec.Dev delivers clean, fast, and high-performance digital solutions.";
-        
-        if (text.toLowerCase().includes("about") || text.toLowerCase().includes("johnny")) {
-            aiResponse = "Johnny Tec.Dev builds cutting-edge web applications, clean code architectures, and high-performance user experiences.";
-        } else if (text.toLowerCase().includes("services") || text.toLowerCase().includes("offer")) {
-            aiResponse = "We specialize in full-stack web development, frontend UI/UX design, mobile responsiveness, and cloud integrations.";
-        }
+        removeTypingIndicator();
+
+        // Calls the brain function from ai-brain.js
+        const aiResponse = generateSmartResponse(text);
 
         activeChat.messages.push({ sender: "ai", text: aiResponse });
         appendBubbleToUI("ai", aiResponse);
         saveState();
-    }, 600);
+    }, thinkingTime);
 }
 
 function scrollToBottom() {
@@ -259,7 +286,7 @@ function openPinnedModal() {
     closeRightMenu();
     const content = document.getElementById("pinned-content");
     content.innerHTML = pinnedMessages.length === 0 ? "<p style='color: var(--text-muted); font-size: 0.85rem;'>No pinned messages yet.</p>" : pinnedMessages.map(m => `
-        <div style="background: var(--card-bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem;">${m}</div>
+        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 0.9rem; color: #fff;">${m}</div>
     `).join("");
     document.getElementById("pinned-modal").classList.add("show");
     document.getElementById("backdrop").classList.add("show");
@@ -279,6 +306,6 @@ function showToast(msg) {
     const toast = document.getElementById("toast-msg");
     toast.innerText = msg;
     toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-        }
+    setTimeout(() => toast.classList.remove("show"), 2500);
+                   }
         
