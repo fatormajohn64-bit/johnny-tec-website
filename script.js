@@ -140,12 +140,6 @@ function appendBubbleToUI(sender, text) {
     scrollToBottom();
 }
 
-    row.appendChild(label);
-    row.appendChild(bubble);
-    chatContainer.appendChild(row);
-    scrollToBottom();
-}
-
 // TYPING "THINKING" DOTS
 function showTypingIndicator() {
     const row = document.createElement("div");
@@ -333,4 +327,4 @@ function showToast(msg) {
     toast.innerText = msg;
     toast.classList.add("show");
     setTimeout(() => toast.classList.remove("show"), 2500);
-}
+            }
