@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Johnny Tec.Dev</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -61,11 +61,66 @@
     </div>
 </div>
 
-<!-- YOUR MAIN WEBSITE CONTENT -->
-<main id="main-content">
-    <h1>Welcome to Johnny Tec.Dev</h1>
-    <p>Your application is ready.</p>
-</main>
+<!-- MAIN CHAT APPLICATION (REVEALED AFTER LOADING) -->
+<div id="app-container">
+    <!-- Top Header Navigation -->
+    <header>
+        <button class="icon-btn" onclick="toggleDrawer()">☰</button>
+        <div class="header-title-group">
+            <span class="brand-title">Johnny Tec AI</span>
+            <span class="status-dot online"></span>
+        </div>
+        <button class="icon-btn" onclick="toggleRightMenu()">⋮</button>
+    </header>
+
+    <!-- Chat Stream View -->
+    <main id="chat-container"></main>
+
+    <!-- Fixed Bottom Input Footer -->
+    <footer>
+        <input type="text" id="user-input" placeholder="Ask Johnny Tec..." autocomplete="off">
+        <button id="send-btn" onclick="sendMessage()">➔</button>
+    </footer>
+
+    <!-- Left Side Navigation Drawer -->
+    <div class="drawer" id="left-drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">Menu</span>
+            <button class="icon-btn" onclick="toggleDrawer()">✕</button>
+        </div>
+        <button class="btn-new-chat" onclick="createNewChat()">
+            <span>＋</span> New Chat
+        </button>
+        <div class="history-label">CHAT HISTORY</div>
+        <div class="history-list" id="history-list"></div>
+    </div>
+
+    <!-- Right Options Dropdown -->
+    <div class="dropdown-menu" id="right-menu">
+        <div class="dropdown-item" onclick="openPinnedModal()">
+            <span>📌</span> Pinned Messages
+        </div>
+        <div class="dropdown-item" onclick="shareConversation()">
+            <span>📤</span> Share Conversation
+        </div>
+        <div class="dropdown-item danger" onclick="deleteCurrentChat()">
+            <span>🗑️</span> Clear Chat
+        </div>
+    </div>
+
+    <!-- Dark Overlay Backdrop -->
+    <div class="backdrop" id="backdrop" onclick="closeAllOverlays()"></div>
+
+    <!-- Pinned Messages Modal -->
+    <div class="modal" id="pinned-modal">
+        <h3>Pinned Messages 📌</h3>
+        <div id="pinned-content" style="max-height: 250px; overflow-y: auto;"></div>
+        <button class="modal-close" onclick="closeAllOverlays()">Close</button>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div class="toast" id="toast-msg">Notification</div>
+</div>
 
 <script src="script.js"></script>
 </body>
