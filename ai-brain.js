@@ -1,38 +1,46 @@
 // ============================================================================
-// JOHNNY TEC AI BRAIN - RENDER BACKEND & SQLITE CONNECTOR
+// JOHNNY TEC AI BRAIN - ASYNC RENDER & LIVE WEB ENGINE
 // ============================================================================
 
 const RENDER_BACKEND_URL = "https://johnny-tec-backend.onrender.com";
 
 async function generateSmartResponse(userQuery) {
+    const rawQuery = userQuery.trim();
+    const q = rawQuery.toLowerCase();
+
+    // 1. Try sending to Render Backend first if online
     try {
-        // 1. Send message to your live Render Backend & SQLite database
-        const response = await fetch(`${RENDER_BACKEND_URL}/chat`, { // adjust endpoint (/api/chat or /chat) if needed
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 sec timeout
+
+        const response = await fetch(`${RENDER_BACKEND_URL}/chat`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: userQuery,
-                prompt: userQuery
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: rawQuery }),
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
-        if (!response.ok) {
-            throw new Error(`Server returned status ${response.status}`);
+        if (response.ok) {
+            const data = await response.json();
+            return data.reply || data.response || data.message;
         }
-
-        const data = await response.json();
-
-        // 2. Return the Gemini response saved by your backend
-        return data.reply || data.response || data.message || "Message received and saved to database!";
-
-    } catch (error) {
-        console.error("Backend Error:", error);
-        
-        // Render Free Tier takes ~50 seconds to wake up if it was sleeping
-        return "⚠️ **Connecting to Render Backend...**\n\n" +
-               "Render free tier servers go to sleep after 15 minutes. " +
-               "Please wait about 30 seconds for the server to wake up, then try sending your message again!";
+    } catch (e) {
+        console.warn("Render server offline or taking too long, switching to local brain...");
     }
+
+    // 2. Local Fallback Brain (Executes immediately if Render is sleeping)
+    if (q.includes("hi") || q.includes("he") || q.includes("ho") || q.includes("hey") || q.includes("bro")) {
+        return "Yo! 👊 Great to see you. How can I help you out today?";
+    }
+
+    if (q.includes("joke") || q.includes("funny")) {
+        return "Why do programmers prefer dark mode? Because light attracts bugs! 🐛😂";
+    }
+
+    if (q.includes("code") || q.includes("ui")) {
+        return "I can help you build clean HTML, CSS, and JS code! Tell me what component you want to create. 💻";
+    }
+
+    return `Got it! I processed your input: "${rawQuery}". What would you like to build or discuss next? 🚀`;
 }
