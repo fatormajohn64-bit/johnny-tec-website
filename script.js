@@ -110,9 +110,18 @@ function appendBubbleToUI(sender, text) {
 
     const bubble = document.createElement("div");
     bubble.className = "bubble";
-    bubble.innerText = text;
 
+    // If it's the AI, render Markdown and Color the Code!
     if (sender === "ai") {
+        // Parse the markdown into HTML
+        bubble.innerHTML = marked.parse(text);
+        
+        // Find all code blocks and apply colors
+        bubble.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        // Add action buttons
         const actions = document.createElement("div");
         actions.className = "bubble-actions";
         actions.innerHTML = `
@@ -120,7 +129,16 @@ function appendBubbleToUI(sender, text) {
             <span class="action-link" onclick="copyText('${encodeURIComponent(text)}')">📋 Copy</span>
         `;
         bubble.appendChild(actions);
+    } else {
+        // Keep user messages as plain text
+        bubble.innerText = text;
     }
+
+    row.appendChild(label);
+    row.appendChild(bubble);
+    chatContainer.appendChild(row);
+    scrollToBottom();
+}
 
     row.appendChild(label);
     row.appendChild(bubble);
