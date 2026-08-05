@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Johnny Tec.Dev</title>
+    <title>Johnny Tec AI</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- FULL-SCREEN SPLASH LOADING SCREEN -->
 <div id="loading-screen">
     <div class="splash-center">
         <!-- JT Glowing Ring & Logo -->
@@ -61,9 +61,8 @@
     </div>
 </div>
 
-<!-- MAIN CHAT APPLICATION (REVEALED AFTER LOADING) -->
+<!-- MAIN CHAT APPLICATION -->
 <div id="app-container">
-    <!-- Top Header Navigation -->
     <header>
         <button class="icon-btn" onclick="toggleDrawer()">☰</button>
         <div class="header-title-group">
@@ -73,16 +72,14 @@
         <button class="icon-btn" onclick="toggleRightMenu()">⋮</button>
     </header>
 
-    <!-- Chat Stream View -->
     <main id="chat-container"></main>
 
-    <!-- Fixed Bottom Input Footer -->
     <footer>
         <input type="text" id="user-input" placeholder="Ask Johnny Tec..." autocomplete="off">
         <button id="send-btn" onclick="sendMessage()">➔</button>
     </footer>
 
-    <!-- Left Side Navigation Drawer -->
+    <!-- Left Menu Drawer -->
     <div class="drawer" id="left-drawer">
         <div class="drawer-header">
             <span class="drawer-title">Menu</span>
@@ -97,18 +94,11 @@
 
     <!-- Right Options Dropdown -->
     <div class="dropdown-menu" id="right-menu">
-        <div class="dropdown-item" onclick="openPinnedModal()">
-            <span>📌</span> Pinned Messages
-        </div>
-        <div class="dropdown-item" onclick="shareConversation()">
-            <span>📤</span> Share Conversation
-        </div>
-        <div class="dropdown-item danger" onclick="deleteCurrentChat()">
-            <span>🗑️</span> Clear Chat
-        </div>
+        <div class="dropdown-item" onclick="openPinnedModal()"><span>📌</span> Pinned Messages</div>
+        <div class="dropdown-item" onclick="shareConversation()"><span>📤</span> Share Conversation</div>
+        <div class="dropdown-item danger" onclick="deleteCurrentChat()"><span>🗑️</span> Clear Chat</div>
     </div>
 
-    <!-- Dark Overlay Backdrop -->
     <div class="backdrop" id="backdrop" onclick="closeAllOverlays()"></div>
 
     <!-- Pinned Messages Modal -->
@@ -118,10 +108,12 @@
         <button class="modal-close" onclick="closeAllOverlays()">Close</button>
     </div>
 
-    <!-- Toast Notification Popup -->
     <div class="toast" id="toast-msg">Notification</div>
 </div>
 
+<!-- Scripts (AI Brain loaded before main script) -->
+<script src="ai-brain.js"></script>
 <script src="script.js"></script>
 </body>
-</html>
+    </html>
+    
