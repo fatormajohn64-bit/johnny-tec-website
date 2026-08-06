@@ -2,7 +2,7 @@
 
 // 👉 Replace with your actual live Render URL, e.g.:
 // "https://johnny-tec-database.onrender.com/chat"
-const BACKEND_URL = "https://YOUR-RENDER-APP-NAME.onrender.com/chat";
+const BACKEND_URL = "https://johnny-tec-backend.onrender.com";
 
 // Give this browser a stable session id so the backend can keep track
 // of the conversation and Johnny Tec remembers what you talked about.
